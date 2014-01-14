@@ -56,4 +56,40 @@ class smiteApiHelper {
 		return $json[0]['Id'];
 	}
 
+	function getGodranks($player) {
+		$timestamp = date('YmdHis');
+		$signature = $this->getSignature('getgodranks', $timestamp);
+		$playerid = $this->getPlayerId($player);
+		$url = 'http://api.smitegame.com/smiteapi.svc/getgodranksJson/' . $this->devid . '/' . $signature . '/' . $this->sessionId . '/' . $timestamp . '/' . $playerid;
+		return json_decode(file_get_contents($url), true);
+	}
+
+	function getMatchHistory($player) {
+		$timestamp = date('YmdHis');
+		$signature = $this->getSignature('getmatchhistory', $timestamp);
+		$playerid = $this->getPlayerId($player);
+		$url = 'http://api.smitegame.com/smiteapi.svc/getmatchhistoryJson/' . $this->devid . '/' . $signature . '/' . $this->sessionId . '/' . $timestamp . '/' . $playerid;
+		return json_decode(file_get_contents($url), true);
+	}
+
+	function getMatchDetails($matchId) {
+		$timestamp = date('YmdHis');
+		$signature = $this->getSignature('getmatchdetails', $timestamp);
+		$url = 'http://api.smitegame.com/smiteapi.svc/getmatchdetailsJson/' . $this->devid . '/' . $signature . '/' . $this->sessionId . '/' . $timestamp . '/' . $matchId;
+		return json_decode(file_get_contents($url), true);
+	}
+
+	function getLastMatch($player) {
+		$history = $this->getMatchHistory($player);
+		$match = $this->getMatchDetails($history[0]['Match']);
+		return $match;
+	}
+
+	function getGods() {
+		$timestamp = date('YmdHis');
+		$signature = $this->getSignature('getgods', $timestamp);
+		$url = 'http://api.smitegame.com/smiteapi.svc/getgodsJson/' . $this->devid . '/' . $signature . '/' . $this->sessionId . '/' . $timestamp . '/1';
+		return json_decode(file_get_contents($url), true);
+	}
+
 }
